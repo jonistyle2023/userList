@@ -35,8 +35,8 @@ public class UserServiceImp implements UserService {
         return repository.save(user);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void deleteBy(Long id) {
         repository.deleteById(id);
     }

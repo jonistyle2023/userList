@@ -62,7 +62,7 @@ public class UserController { // Singleton
     @PostMapping
     public String form(User user, Model model, RedirectAttributes redirect) {
 
-        String message = (user.getId() > 0)? "El usuario  + user.getUsername() + se ha actualizado correctamente" : "El usuario " + user.getUsername() + " se ha creado correctamente";
+        String message = (user.getId() !=null && user.getId() > 0)? "El usuario "  + user.getUsername() + " se ha actualizado correctamente" : "El usuario " + user.getUsername() + " se ha creado correctamente";
 
         service.save(user);
         redirect.addFlashAttribute("success", message);

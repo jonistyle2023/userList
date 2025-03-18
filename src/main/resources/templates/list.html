@@ -8,7 +8,10 @@
 
 <div>
   <h3 th:text="${title}"></h3>
-  <table>
+
+    <a th:href="@{/users/form}" th:text="'crear user (+)'"></a>
+    <div th:text="'no hay usuarios en el sistema!'" th:if="${#lists.isEmpty(users)}"></div>
+  <table th:if="${not #lists.isEmpty(users)}">
     <thead>
     <tr>
       <th>id</th>
@@ -27,10 +30,13 @@
       <td th:text="${user.lastname}"></td>
       <td th:text="${user.email}"></td>
       <td th:text="${user.createdAt}"></td>
-      <td><a th:href="@{/form/{id}(id=${user.id})}">edit</a></td>
-      <td><a th:href="@{/deletedBy/{id}(id=${user.id})}"
-             onclick="return confirm('¿Está seguro que desea eliminar?')">delete</a></td>
-
+      <td><a th:href="@{/users/form/{id}(id=${user.id})}">edit</a></td>
+      <td><a th:href="@{/users/delete/{id}(id=${user.id})}" method="post"
+             onsubmit="return confirm('¿Está seguro que desea eliminar?');">delete</a></td>
+<!--        <form th:action="@{/users/delete/{id}(id=${user.id})}" method="post"-->
+<!--              onsubmit="return confirm('¿Está seguro que desea eliminar?');">-->
+<!--          <button type="submit">delete</button>-->
+<!--        </form>-->
     </tr>
     </tbody>
   </table>
