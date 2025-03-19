@@ -2,18 +2,19 @@ package com.springmvc.app.springmvc.app.controllers;
 
 import com.springmvc.app.springmvc.app.models.User;
 import com.springmvc.app.springmvc.app.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/users")
+@SessionAttributes({"user"})
 public class UserController { // Singleton
 
     private final UserService service;
@@ -60,11 +61,16 @@ public class UserController { // Singleton
     }
 
     @PostMapping
-    public String form(User user, Model model, RedirectAttributes redirect) {
+    public String form(@Valid User user, BindingResult result, Model model, RedirectAttributes redirect, SessionStatus status) {
 
+        if (result.hasErrors()) {
+            model.addAttribute("title", "Validando Formulario de usuario");
+            return "form";
+        }
         String message = (user.getId() !=null && user.getId() > 0)? "El usuario "  + user.getUsername() + " se ha actualizado correctamente" : "El usuario " + user.getUsername() + " se ha creado correctamente";
 
         service.save(user);
+        status.setComplete();
         redirect.addFlashAttribute("success", message);
         return "redirect:/users";
     }
